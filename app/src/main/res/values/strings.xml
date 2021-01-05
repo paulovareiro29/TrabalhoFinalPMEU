@@ -3,4 +3,8 @@
     <string name="bus_icon">Icon Autocarro</string>
     <string name="searching">A procurar</string>
     <string name="title_activity_maps" translatable="false">Trabalho Final</string>
+    <string name="bus_stop_found">Foi encontrada uma paragem!</string>
+    <string name="see_info">Pretende ver a informação?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>

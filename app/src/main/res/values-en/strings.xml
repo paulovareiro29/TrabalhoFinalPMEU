@@ -2,4 +2,8 @@
 <resources>
     <string name="bus_icon">Bus Icon</string>
     <string name="searching">Searching</string>
+    <string name="bus_stop_found">A bus stop has been found!</string>
+    <string name="see_info">Want to see the information?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

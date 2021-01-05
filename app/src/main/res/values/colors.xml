@@ -3,8 +3,9 @@
     <color name="green_200">#FF85E89E</color>
     <color name="green_500">#FF2FD175</color>
     <color name="gray_700">#83101010</color>
-    <color name="gray_500">#686868</color>
+    <color name="gray_500">#FF686868</color>
     <color name="gray_200">#FF808080</color>
+    <color name="gray_100">#FFBBBBBB</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_gray">#FFF7F7F7</color>
