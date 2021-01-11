@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_recycler_item_background"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/rua"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/green_500"
+        android:textSize="22dp"
+        android:text="Praça do Almada"
+        />
+
+    <TextView
+        android:id="@+id/cidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rua"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/gray_500"
+        android:textSize="20dp"
+        android:text="Povoa de Varzim"
+        />
+
+    <TextView
+        android:id="@+id/codpostal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cidade"
+        android:fontFamily="@font/roboto"
+        android:textColor="@color/gray_500"
+        android:textSize="20dp"
+        android:text="4480-438"
+        />
+
+</RelativeLayout>

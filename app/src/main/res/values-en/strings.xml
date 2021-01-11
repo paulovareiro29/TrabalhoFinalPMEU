@@ -6,4 +6,12 @@
     <string name="see_info">Want to see the information?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="title_activity_paragem">Bus Stop</string>
+    <string name="schedules">Schedules</string>
+    <string name="title_activity_carreira">Route</string>
+    <string name="title_activity_direcoes">Directions</string>
+    <string name="average_time">Average time</string>
+    <string name="distance">Distance</string>
+    <string name="bus_stops">Bus stops</string>
+    <string name="directions">Directions</string>
 </resources>

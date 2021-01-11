@@ -1,6 +1,7 @@
 package ipvc.estg.trabalhofinal
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
     private lateinit var directionsPoint: LatLng  //Variavel do ponto das direçoes, definido quando o utilizador clica no mapa
 
+    /*teste*/
+    private var idParagem = 1
+    /**/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +87,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         }
 
         popup.findViewById<Button>(R.id.goToInfoButton).setOnClickListener {
-            Toast.makeText(this,"Going...",Toast.LENGTH_SHORT).show()
+
+            startActivity(
+                Intent(applicationContext,ParagemActivity::class.java)
+                    .putExtra("id",idParagem)
+            )
+            onBeaconScannerClick(null)
+            dismissPopup()
         }
     }
 
@@ -105,7 +115,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
     /*Botão de calcular direções*/
     fun goToDirections(v: View?){
-        Toast.makeText(this,"Calculando direções",Toast.LENGTH_SHORT).show()
+        if(directionsPoint == null){
+            cancelDirections(null)
+            return
+        }
+
+
+        startActivity(
+            Intent(applicationContext,DirecoesActivity::class.java)
+                .putExtra("latitude", directionsPoint.latitude)
+                .putExtra("longitude", directionsPoint.longitude)
+        )
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

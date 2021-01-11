@@ -7,4 +7,12 @@
     <string name="see_info">Pretende ver a informação?</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="title_activity_paragem">Paragem</string>
+    <string name="schedules">Horários</string>
+    <string name="title_activity_carreira">Carreira</string>
+    <string name="title_activity_direcoes">Direções</string>
+    <string name="average_time">Tempo médio</string>
+    <string name="distance">Distância</string>
+    <string name="bus_stops">Paragens</string>
+    <string name="directions">Direções</string>
 </resources>
