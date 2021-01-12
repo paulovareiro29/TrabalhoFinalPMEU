@@ -1,11 +1,14 @@
 package ipvc.estg.trabalhofinal
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -50,18 +53,6 @@ class ParagemActivity : AppCompatActivity(), OnMapReadyCallback, OnHorarioClickL
 
         fetchInfo(id)
 
-
-
-        /*teste*/
-
-        var lista = ArrayList<Horario>()
-
-
-
-
-
-        /**/
-
     }
 
     fun fetchInfo(id: Int){
@@ -105,12 +96,17 @@ class ParagemActivity : AppCompatActivity(), OnMapReadyCallback, OnHorarioClickL
 
         findViewById<RecyclerView>(R.id.lista_horarios).adapter = HorarioAdapter(lista,this)
         findViewById<RecyclerView>(R.id.lista_horarios).layoutManager = LinearLayoutManager(this)
+
+        var loc = LatLng(info.latitude,info.longitude)
+        mMap.addMarker(MarkerOptions().position(loc).title(info.rua))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16f))
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
     }
+
 
     /*quando clica num horario*/
     override fun onHorarioClickListener(horario: Horario) {

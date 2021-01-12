@@ -48,19 +48,6 @@ class CarreiraActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fetchInfo(id)
 
-        /*teste*/
-
-        var lista = ArrayList<Paragem>()
-
-        for (i in 0 until 20) {
-            lista.add(Paragem(i,"Praça do Almada", "Povoa de Varzim", "4480-438"))
-        }
-
-        findViewById<RecyclerView>(R.id.lista_paragens).adapter = ParagemAdapter(lista)
-        findViewById<RecyclerView>(R.id.lista_paragens).layoutManager = LinearLayoutManager(this)
-
-        /**/
-
     }
 
     fun fetchInfo(id: Int){
@@ -94,6 +81,7 @@ class CarreiraActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById<TextView>(R.id.tempo).text = "${hora}h${min}m"
         findViewById<TextView>(R.id.distancia).text = "${distancia}km"
 
+        var lastMarkerPos: LatLng? = null
 
         var lista = ArrayList<Paragem>()
         for (paragem in info.paragens) {
@@ -106,7 +94,12 @@ class CarreiraActivity : AppCompatActivity(), OnMapReadyCallback {
                     "${paragem.rua}",
                     "${paragem.cidade}",
                     "${paragem.cod_postal}"))
+
+            lastMarkerPos = LatLng(paragem.latitude,paragem.longitude)
+            mMap.addMarker(MarkerOptions().position(lastMarkerPos).title("${paragem.rua} - ${paragem.cidade}"))
         }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastMarkerPos, 10f))
 
         findViewById<RecyclerView>(R.id.lista_paragens).adapter = ParagemAdapter(lista)
         findViewById<RecyclerView>(R.id.lista_paragens).layoutManager = LinearLayoutManager(this)
@@ -116,4 +109,5 @@ class CarreiraActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
     }
+
 }
