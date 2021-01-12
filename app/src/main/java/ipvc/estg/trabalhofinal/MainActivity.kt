@@ -1,8 +1,10 @@
 package ipvc.estg.trabalhofinal
 
-
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -10,19 +12,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var lastLocation: Location
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
 
     private var scanning: Boolean = false //Variavel de estado do scanner
     private var popupInfo: PopupWindow? = null //popup da informaçao
@@ -38,9 +46,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         setContentView(R.layout.activity_main)
 
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                lastLocation = locationResult.lastLocation
+            }
+        }
+
+        //criar o pedido de localição
+        createLocationRequest()
     }
 
     /*Quando se carrega no beacon scanner*/
@@ -91,8 +111,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         popup.findViewById<Button>(R.id.goToInfoButton).setOnClickListener {
 
             startActivity(
-                Intent(applicationContext,ParagemActivity::class.java)
-                    .putExtra("id",idParagem)
+                    Intent(applicationContext,ParagemActivity::class.java)
+                            .putExtra("id",idParagem)
+                            .putExtra("lastLocLatitude", lastLocation.latitude)
+                            .putExtra("lastLocLongitude", lastLocation.longitude)
             )
             onBeaconScannerClick(null)
             dismissPopup()
@@ -124,9 +146,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
 
         startActivity(
-            Intent(applicationContext,DirecoesActivity::class.java)
-                .putExtra("latitude", directionsPoint.latitude)
-                .putExtra("longitude", directionsPoint.longitude)
+                Intent(applicationContext,DirecoesActivity::class.java)
+                        .putExtra("latitude", directionsPoint.latitude)
+                        .putExtra("longitude", directionsPoint.longitude)
         )
     }
 
@@ -135,6 +157,46 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         mMap.setOnMapClickListener(this)
 
 
+        setupMap()
     }
+
+    fun setupMap(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    10)
+            return
+        }
+        mMap.isMyLocationEnabled = true
+
+        fusedLocationClient.lastLocation.addOnSuccessListener(this){ location ->
+            if(location != null) {
+                lastLocation = location
+
+                val currentLatLng = LatLng(location.latitude, location.longitude)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16f))
+
+                startLocationUpdates()
+            }
+        }
+
+
+    }
+
+    fun startLocationUpdates() {
+        if(ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun createLocationRequest(){
+        locationRequest = LocationRequest()
+        locationRequest.interval = 5000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
 
 }
