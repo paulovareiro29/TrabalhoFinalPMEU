@@ -15,4 +15,5 @@
     <string name="distance">Distância</string>
     <string name="bus_stops">Paragens</string>
     <string name="directions">Direções</string>
+    <string name="error_loading">Erro ao carregar</string>
 </resources>

@@ -7,9 +7,9 @@ import retrofit2.http.*
 
 interface Endpoints {
 
-    @GET("/paragem/{id}")
+    @GET("paragem/{id}")
     fun getParagemById(@Path("id") id: Int): Call<Paragem>
 
-    @GET("/carreira/{id}")
+    @GET("carreira/{id}")
     fun getCarreiraById(@Path("id") id: Int): Call<Carreira>
 }
