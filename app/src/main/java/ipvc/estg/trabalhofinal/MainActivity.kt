@@ -1,5 +1,6 @@
 package ipvc.estg.trabalhofinal
 
+
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -10,26 +11,26 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
 
-    private var scanning: Boolean = false //Variavel de estado do scanner
 
+    private var scanning: Boolean = false //Variavel de estado do scanner
     private var popupInfo: PopupWindow? = null //popup da informaçao
 
     private lateinit var directionsPoint: LatLng  //Variavel do ponto das direçoes, definido quando o utilizador clica no mapa
 
     /*teste*/
-    private var idParagem = 1
+    private var idParagem: Int = 1
     /**/
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     /*Quando se carrega no beacon scanner*/
@@ -131,11 +133,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapClickListener(this)
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
 
+
+    }
 
 }
