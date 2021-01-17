@@ -126,8 +126,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
     override fun onMapClick(point: LatLng) {
         mMap.clear()
 
-        directionsPoint = point
-        mMap.addMarker(MarkerOptions().position(directionsPoint))
+        var marker = mMap.addMarker(MarkerOptions().position(point))
+        directionsPoint = marker.position
         findViewById<RelativeLayout>(R.id.directions).visibility = View.VISIBLE
     }
 
@@ -147,8 +147,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
         startActivity(
                 Intent(applicationContext,DirecoesActivity::class.java)
-                        .putExtra("latitude", directionsPoint.latitude)
-                        .putExtra("longitude", directionsPoint.longitude)
+                        .putExtra("start_latitude", lastLocation.latitude)
+                        .putExtra("start_longitude", lastLocation.longitude)
+                        .putExtra("end_latitude", directionsPoint.latitude)
+                        .putExtra("end_longitude", directionsPoint.longitude)
         )
     }
 

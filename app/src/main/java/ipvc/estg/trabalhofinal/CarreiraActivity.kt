@@ -99,6 +99,7 @@ class CarreiraActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().position(lastMarkerPos).title("${paragem.rua} - ${paragem.cidade}"))
         }
 
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastMarkerPos, 10f))
 
         findViewById<RecyclerView>(R.id.lista_paragens).adapter = ParagemAdapter(lista)
