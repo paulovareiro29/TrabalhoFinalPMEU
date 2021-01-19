@@ -44,6 +44,7 @@ class ParagemActivity : AppCompatActivity(), OnMapReadyCallback, OnHorarioClickL
 
 
         val id = intent.getIntExtra("id", 0) //ID da paragem passado pelo intent
+        Log.d("debugg", "ID: ${id}")
         if(id == 0){ //se o ID for 0, ou seja nao foi passado nenhum ID dá finish
             Toast.makeText(applicationContext,R.string.error_loading, Toast.LENGTH_LONG).show()
             finish()

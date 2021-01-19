@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory
+import com.estimote.proximity.estimote.ProximityContentManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
     private lateinit var directionsPoint: LatLng  //Variavel do ponto das direçoes, definido quando o utilizador clica no mapa
 
+
+    private var proximityContentManager: ProximityContentManager? = null
     /*teste*/
     private var idParagem: Int = 1
     /**/
@@ -61,6 +66,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
 
         //criar o pedido de localição
         createLocationRequest()
+
+        RequirementsWizardFactory
+                .createEstimoteRequirementsWizard()
+                .fulfillRequirements(this,
+                        {
+                            Log.d("app", "requirements fulfilled")
+                        },
+                        { requirements ->
+                            Log.e("app", "requirements missing: " + requirements)
+
+                        }
+                        , { throwable ->
+                    Log.e("app", "requirements error: " + throwable)
+                })
+    }
+
+    private fun startProximityContentManager() {
+        proximityContentManager = ProximityContentManager(this,this)
+        proximityContentManager?.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        proximityContentManager?.stop()
     }
 
     /*Quando se carrega no beacon scanner*/
@@ -72,7 +101,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
         if(scanning){
             Toast.makeText(this,"${getString(R.string.searching)}...",Toast.LENGTH_SHORT).show()
             fab.setColorFilter(ContextCompat.getColor(this, R.color.red_200), android.graphics.PorterDuff.Mode.SRC_IN)
-            showInfoPopup()
+
+            startProximityContentManager()
         }else{
             dismissPopup()
             fab.setColorFilter(ContextCompat.getColor(this, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN)
@@ -84,9 +114,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCli
             popupInfo!!.dismiss()
             popupInfo = null
         }
+        proximityContentManager?.stop()
     }
 
-    fun showInfoPopup(){
+    fun showInfoPopup(idParagem: Int){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popup = inflater.inflate(R.layout.popup_info, null)
 
